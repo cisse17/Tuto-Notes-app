@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Note</title>
+</head>
+<body>
+
+    <nav style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
+        <a href="{% url 'home' %}">Accueil</a>
+        <a href="{% url 'notes' %}">Notes</a>
+    </nav>
+
+    {% if messages%}
+
+        {% for message in messages%}
+        
+            <p style="color: green;">{{ message }}</p>
+        
+        {% endfor %}
+    {% endif %}
+
+    {% block content%}
+
+    {% endblock %}
+
+</body>
+</html>
