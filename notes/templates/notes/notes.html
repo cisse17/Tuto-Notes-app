@@ -3,12 +3,14 @@
 
 {% block content%}
  <h1> Voici les notes créées </h1>
- <ul>
-    {% for note in notes%}
-    <li> Titre :  {{ note.title }}</li>
-    <p>Contenu : {{ note.content }}</p>
 
+
+    {% for note in notes%}
+    <h3>Titre : <a href="{% url 'detail' note.pk %}"> {{ note.title }} </a></h3>
+    <p>Description : {{ note.content}}</p>
+    <a href="{% url 'detail' note.pk %}">Voir </a>
     {% endfor %}
- </ul>
+
+
 
 {% endblock %}

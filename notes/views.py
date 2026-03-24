@@ -3,11 +3,13 @@ from django.shortcuts import render
 
 from .models import Note
 from django.http import HttpResponse
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
 from .forms import NoteForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.shortcuts import redirect
+
 
 # Create your views here.
 
@@ -18,6 +20,7 @@ class NotesView(ListView):
     model = Note
     template_name = "notes/notes.html"
     context_object_name = "notes"  
+
     
 class CreateNoteView(CreateView):
     model = Note
@@ -45,8 +48,10 @@ class UpdateNoteView(UserPassesTestMixin, UpdateView):
     model = Note
     form_class = NoteForm
     template_name = "notes/create.html"
-    success_url = reverse_lazy("notes")
-    pk_url_kwarg = "id"
+  
+
+    def get_success_url(self, *args, **kwargs):
+        return reverse("detail", kwargs={"pk": self.object.pk })
 
 
     def get_context_data(self, **kwargs):
@@ -61,8 +66,7 @@ class UpdateNoteView(UserPassesTestMixin, UpdateView):
     
     def handle_no_permission(self):
         messages.error(self.request, "Vous n'avez pas la permission de modifier cette note.")
-        return super().handle_no_permission()
-    
+        return redirect("notes")
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -73,7 +77,37 @@ class UpdateNoteView(UserPassesTestMixin, UpdateView):
         messages.error(self.request, "Une erreur s'est produite lors de la modification de la note.")
         return super().form_invalid(form)
 
-  
 
 
+class DeleteNoteView(UserPassesTestMixin, DeleteView):
+    model = Note
+    template_name = "notes/delete.html"
+    success_url = reverse_lazy("notes")
 
+    def test_func(self):
+        note = self.get_object()
+        return note.user == self.request.user
+    
+    def handle_no_permission(self):
+        messages.success(self.request, "Vous n'avez pas le droit de supprimer cette note")
+        return redirect("notes")
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        messages.success(self.request, f"Note {self.object.title} supprimée avec succés")
+        return super().post(request, *args, **kwargs)
+    
+class DetailNoteView(UserPassesTestMixin, DetailView):
+    model = Note
+    template_name = "notes/detail.html"
+    context_object_name = "detail"
+
+
+    def test_func(self):
+        note = self.get_object()
+        return note.user == self.request.user
+    
+
+    def handle_no_permission(self):
+        messages.success(self.request, "Vous ne pouvez pas voir les details de cette note" )
+        return redirect("notes")

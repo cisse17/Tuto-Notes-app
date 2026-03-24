@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<h1>Les details d'une note </h1>
+
+<h4>Titre : {{detail.title }} </h4>
+<p>Description : {{ detail.content }} </p>
+<p>Date de création : {{ detail.created_at }} </p>
+<p>Date de modification : {{ detail.updated_at }} </p>
+
+<a href="{% url 'modifier' detail.pk %}">Modifier</a>
+<a href="{% url 'supprimer' detail.pk  %}">Supprimer</a>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+    <p>Etes vous sur de vouloir supprimer la note "{{note.title }}" ?</p>
+    <button type="submit" style="color: red;">Oui, supprimer</button>
+    <a href="{% url 'detail' note.pk %}">Annuler</a>
+    
+</form>
+
+{% endblock %}
