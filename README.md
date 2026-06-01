@@ -51,19 +51,29 @@ Voilà pour la stack. On va intégrer tout ça
 progressivement, vidéo par vidéo."
 
 
-VIDÉO 1 : Class-Based Views
+VIDÉO 1 : set up projet
+- Programme
+- Django et telechargement des packages 
+- Création de superuser pour l'administration
+- Teste url
+
+VIDÉO 2 : Class-Based Views
 - ListView, 
 - CreateView, 
 - UpdateView, 
 - TemplateView 
 
-VIDÉO 2 : Class-Based Views
+VIDÉO 3 : Class-Based Views
 - DeleteView, 
 - DetailView
+
+VIDéo 4 : Class-Based Views/Auth et sécurité
+- Création app accounts
 - Mixins de sécurité
 - Authentification
 
-VIDÉO 3 : API REST avec ViewSet
+VIDÉO 5 : API REST avec ViewSet
 - Serializers
 - ViewSet CRUD complet
 - Permissions
+
