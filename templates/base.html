@@ -8,10 +8,21 @@
 <body>
 
     <nav style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
-        <a href="{% url 'home' %}">Accueil</a>
-        <a href="{% url 'notes' %}">Notes</a>
-        <a href="{% url 'creer' %}"> Ajouter une note </a>
-        
+        {% if request.user.is_authenticated %}  
+            <p>Bonjour <strong>{{ user.username }} </strong></p>
+            <a href="{% url 'home' %}">Accueil</a>
+            <a href="{% url 'notes' %}">Notes</a>
+            <a href="{% url 'creer' %}"> Ajouter une note </a>
+            <form method="Post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <input type="submit" value="Se déconnecter">
+            </form>
+        {% else %}
+            <a href="{% url 'home' %}">Accueil</a>
+            <a href="{% url 'register' %}">S'inscrire</a>
+            <a href="{% url 'login' %}">Se connecter </a>
+
+        {% endif %}
     </nav>
 
     {% if messages%}

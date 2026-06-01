@@ -9,6 +9,7 @@ from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Create your views here.
@@ -16,13 +17,13 @@ from django.shortcuts import redirect
 class HomeView(TemplateView):
     template_name = "notes/home.html" 
 
-class NotesView(ListView):
+class NotesView(LoginRequiredMixin, ListView):
     model = Note
     template_name = "notes/notes.html"
     context_object_name = "notes"  
 
     
-class CreateNoteView(CreateView):
+class CreateNoteView(LoginRequiredMixin, CreateView):
     model = Note
     form_class = NoteForm
     template_name = "notes/create.html"
@@ -44,7 +45,7 @@ class CreateNoteView(CreateView):
         return super().form_invalid(form)
 
 
-class UpdateNoteView(UserPassesTestMixin, UpdateView):
+class UpdateNoteView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Note
     form_class = NoteForm
     template_name = "notes/create.html"
@@ -79,7 +80,7 @@ class UpdateNoteView(UserPassesTestMixin, UpdateView):
 
 
 
-class DeleteNoteView(UserPassesTestMixin, DeleteView):
+class DeleteNoteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Note
     template_name = "notes/delete.html"
     success_url = reverse_lazy("notes")
@@ -97,7 +98,7 @@ class DeleteNoteView(UserPassesTestMixin, DeleteView):
         messages.success(self.request, f"Note {self.object.title} supprimée avec succés")
         return super().post(request, *args, **kwargs)
     
-class DetailNoteView(UserPassesTestMixin, DetailView):
+class DetailNoteView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Note
     template_name = "notes/detail.html"
     context_object_name = "detail"
